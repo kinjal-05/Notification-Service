@@ -1,0 +1,38 @@
+spring:
+  application:
+    name: notification-service   # unique service name
+
+  cloud:
+    function:
+      definition: productConsumer;userEmailsConsumer
+    stream:
+      bindings:
+        productConsumer-in-0:
+          destination: product-topic
+          group: notification-group-NEW
+          content-type: application/json
+
+        categoryConsumer-in-0:
+          destination: category-topic
+          group: notification-group
+          content-type: application/json
+
+
+        userEmailsConsumer-in-0:
+          destination: user-emails-topic
+          group: notification-group-1
+
+        userFetch-out-0:
+          destination: user-fetch-topic
+          content-type: application/json
+
+      kafka:
+        binder:
+          brokers: localhost:9092
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+  instance:
+    prefer-ip-address: true
